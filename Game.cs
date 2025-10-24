@@ -10,7 +10,9 @@ namespace Lab_7
     {
         public static readonly string[] List = { "äpple", "tyvärr", "självklart", "citrus", "tvättkorg", "fönster", "telefon", "solrosfrö", "apelsinjuice" };
 
-        public static bool WordIsComplete;
+        private static HashSet<char> guessedLetters = new(); // keeps track of guessed letters
+
+        private static int wrongGuesses = 0;
 
         public static string GetWord()
         {
@@ -19,47 +21,87 @@ namespace Lab_7
             return word;
         }
 
-        private static HashSet<char> guessedLetters = new(); // keeps track of guessed letters
-
-        public static bool CheckLetter(char letter, string word)
+        public static void Reset()
         {
-            //int tries = 8;
-            //while (tries > 0)
-            //{
+            guessedLetters.Clear();
+            wrongGuesses = 0;
+        }
 
-            //}
+        public static bool CheckAndContinue(char letter, string word) //returns true if game should continue, false if game over/won
+        {
+            if (guessedLetters.Contains(letter))
+            {
+                Console.WriteLine($"\t\t\tDu har redan gissat på {letter}!");
+                return true;
+            }
+
             guessedLetters.Add(letter);
+
             Console.WriteLine($"\t\t\tDu gissade på {letter}");
 
-            string display = ""; // building a string to display only guessed letters
+            bool letterIsInWord = false; 
+
+
+            string display = ""; //for building a string to display only guessed letters
 
             foreach (char c in word)
             {
                 if (guessedLetters.Contains(c))
                 {
                     display += c + " ";
+                    if (c == letter) letterIsInWord = true;
                 }
                 else
                 {
-                    //tries--;
                     display += "_ ";
                 }
             }
 
-            Console.WriteLine(display);
-
-            
-            
-            
-            if (!display.Contains('_') )//&& tries < 9)
+            if (!letterIsInWord)
             {
-                WordIsComplete = true;
+                wrongGuesses++;
             }
 
-            return WordIsComplete;
+            Console.WriteLine(display);
+            
+            Console.WriteLine(Hangman.Stages[wrongGuesses]);
 
+            if (!display.Contains('_') )
+            {
+                Console.WriteLine("\nDu klarade det! Snyggt jobbat!");
+                return false;
+            }
+            
+            if (wrongGuesses >= 8)
+            {
+                Console.WriteLine("\nTyvärr, du förlorade. Ordet var: " + word);
+                return false;
+            }
+
+            return true;
         }
 
+        public static void StartGame()
+        {
+            Console.Clear();
+            string word = GetWord();
+            Reset();
 
+            bool inGame = true;
+
+            while (inGame)
+            {
+                Console.Write("\n\t\t\tGissa en bokstav: ");
+
+                if (!char.TryParse(Console.ReadLine(), out char userGuess))
+                {
+                    Console.WriteLine("\t\t\tSkriv endast en bokstav!");
+                    continue;
+                }
+
+                inGame = CheckAndContinue(userGuess, word);
+
+            }
+        }
     }
 }

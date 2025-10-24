@@ -8,55 +8,38 @@ namespace Lab_7
         {
             bool isRunning = true;
 
-            Console.WriteLine("""
-            +---+
-            |   O
-            |  /|\         Välkommen till Hänga gubbe-spelet!
-            |  / \
-            |              1. Nytt spel
-            =========      2. Avsluta
-            """);
-
-            string? userChoice = Console.ReadLine();
-
-            
-
-            switch (userChoice)
-            {
-                case "1":
-                    isRunning = true;
-                    break;    
-                case "2":
-                    isRunning = false;
-                    break;
-                default:
-                    isRunning = false; 
-                    Console.WriteLine("Fel. Välj 1 eller 2.");
-                    break; //avslutar programmet, fixa?
-            }
-            Console.Clear();
-
-            
-
-            string word = Game.GetWord();
-
             while (isRunning)
             {
-                Console.Write("\n\t\t\tGissa en bokstav: ");
-                char userGuess = char.Parse(Console.ReadLine());
-                
-                bool solved = Game.CheckLetter(userGuess, word);
+                Console.WriteLine("""
+                +---+
+                |   O
+                |  /|\         Välkommen till Hänga gubbe-spelet!
+                |  / \
+                |              1. Nytt spel
+                =========      2. Avsluta
+                """);
 
-                if (solved)
+                string? userChoice = Console.ReadLine();
+
+                switch (userChoice)
                 {
-                    Console.WriteLine("\nDu klarade det! Snyggt jobbat!");
-                    isRunning = false;
+                    case "1":
+                        Game.StartGame();
+                        Console.WriteLine("\nTryck på valfri tangent för att återgå till menyn.");
+                        Console.ReadKey();
+                        break;
+                    case "2":
+                        isRunning = false;
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("\n\n\t\tOgiltigt val. Tryck på valfri tangent för att fortsätta.");
+                        Console.ReadKey();
+                        break;
                 }
 
+                Console.Clear();
             }
-            
-            
-
         }
     }
 }
