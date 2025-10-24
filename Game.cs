@@ -6,21 +6,28 @@ using System.Threading.Tasks;
 
 namespace Lab_7
 {
-    internal class Game
+    internal static class Game
     {
-        public readonly string[] List = { "äpple", "tyvärr", "självklart", "citrus", "tvättkorg", "fönster", "telefon", "solrosfrö", "apelsinjuice" };
+        public static readonly string[] List = { "äpple", "tyvärr", "självklart", "citrus", "tvättkorg", "fönster", "telefon", "solrosfrö", "apelsinjuice" };
 
-        public string GetWord()
+        public static bool WordIsComplete;
+
+        public static string GetWord()
         {
             Random random = new();
             string word = List[random.Next(List.Length)];
             return word;
         }
 
-        private HashSet<char> guessedLetters = new(); // keeps track of guessed letters
+        private static HashSet<char> guessedLetters = new(); // keeps track of guessed letters
 
-        public void CheckLetter(char letter, string word)
+        public static bool CheckLetter(char letter, string word)
         {
+            //int tries = 8;
+            //while (tries > 0)
+            //{
+
+            //}
             guessedLetters.Add(letter);
             Console.WriteLine($"\t\t\tDu gissade på {letter}");
 
@@ -34,20 +41,23 @@ namespace Lab_7
                 }
                 else
                 {
+                    //tries--;
                     display += "_ ";
                 }
             }
 
-            //if (display.Contains('_'))
-            //{
-                
-            //}
-            //else
-            //{
+            Console.WriteLine(display);
 
-            //}
+            
+            
+            
+            if (!display.Contains('_') )//&& tries < 9)
+            {
+                WordIsComplete = true;
+            }
 
-                Console.WriteLine(display);
+            return WordIsComplete;
+
         }
 
 

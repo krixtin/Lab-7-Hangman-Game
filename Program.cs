@@ -30,21 +30,28 @@ namespace Lab_7
                     isRunning = false;
                     break;
                 default:
+                    isRunning = false; 
                     Console.WriteLine("Fel. Välj 1 eller 2.");
                     break; //avslutar programmet, fixa?
             }
             Console.Clear();
 
-            var game = new Game();
+            
 
-            string word = game.GetWord();
+            string word = Game.GetWord();
 
             while (isRunning)
             {
                 Console.Write("\n\t\t\tGissa en bokstav: ");
                 char userGuess = char.Parse(Console.ReadLine());
+                
+                bool solved = Game.CheckLetter(userGuess, word);
 
-                game.CheckLetter(userGuess, word);
+                if (solved)
+                {
+                    Console.WriteLine("\nDu klarade det! Snyggt jobbat!");
+                    isRunning = false;
+                }
 
             }
             
